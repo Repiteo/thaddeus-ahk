@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
-#include Initialize.ahk
-#include WaveLink.ahk
+#Include Include/Initialize.ahk
+#Include WaveLink.ahk
 
 ; Scan Code & Virtual Key reference: https://docs.google.com/spreadsheets/d/1GSj0gKDxyWAecB3SIyEZ2ssPETZkkxn67gdIwL1zFUs/
 
@@ -44,16 +44,6 @@ catch Error as err
 
 ; Functions
 ; ==========
-
-; ToDecibel(volume)
-; {
-; 	return Round(20 * Log(volume) - 40, 1) " dB"
-; }
-
-; MixerLabel(string, volume)
-; {
-; 	return string "`n`n`n`n`n`n`n`n`n`n" ToDecibel(volume) "`n" volume
-; }
 
 MyGui := Gui("+AlwaysOnTop +ToolWindow -Caption")
 MyGui.Title := "Volume MultiMix"

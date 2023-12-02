@@ -1,5 +1,6 @@
-#Include PreventStandalone.ahk
 #Requires AutoHotkey v2.0
+
+#Include Include/PreventStandalone.ahk
 
 WaveLink := 0 ; 0 = initial value, -1 = not found, 1 = found
 
