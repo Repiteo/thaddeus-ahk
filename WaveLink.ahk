@@ -8,11 +8,6 @@ if (A_ScriptFullPath = A_LineFile)
 
 class MediaKey
 {
-	DeviceName := ""
-	IniName := ""
-	Volume := 0
-	Muted := false
-
 	__New(name)
 	{
 		this.DeviceName := "Wave Link " name
@@ -24,7 +19,7 @@ class MediaKey
 		SoundSetMute(this.Muted, , this.DeviceName)
 	}
 
-	__Delete()
+	Save()
 	{
 		IniWrite(this.Volume, "G-Keys.ini", "WaveLink", this.IniName "Volume")
 		IniWrite(this.Muted, "G-Keys.ini", "WaveLink", this.IniName "Muted")
@@ -71,27 +66,29 @@ class WaveLink extends Gui
 		this.Add("Progress", "vBar" 4 " h100 w10 xp+15 yp+22 Center Vertical", this.SoundDevices[4].Volume)
 	}
 
-	__Delete()
+	Save()
 	{
 		if not FileExist("G-Keys.ini")
 			FileAppend("", "G-Keys.ini", "UTF-8-RAW")
 
 		IniWrite(this.MediaKeyIndex, "G-Keys.ini", "WaveLink", "MediaKeyIndex")
+		Loop 4
+		{
+			this.SoundDevices[A_Index].Save()
+		}
+		this.Hide()
 	}
 
 	Display()
 	{
 		this.Show("x10 y50 NoActivate")
-		this["Bar" 1].Opt(this.MediaKeyIndex = 1 ? "cGreen" : "cBlue")
-		this["Bar" 1].Opt(this.SoundDevices[1].Muted = 0 ? "BackgroundDefault" : "BackgroundMaroon")
-		this["Bar" 2].Opt(this.MediaKeyIndex = 2 ? "cGreen" : "cBlue")
-		this["Bar" 2].Opt(this.SoundDevices[2].Muted = 0 ? "BackgroundDefault" : "BackgroundMaroon")
-		this["Bar" 3].Opt(this.MediaKeyIndex = 3 ? "cGreen" : "cBlue")
-		this["Bar" 3].Opt(this.SoundDevices[3].Muted = 0 ? "BackgroundDefault" : "BackgroundMaroon")
-		this["Bar" 4].Opt(this.MediaKeyIndex = 4 ? "cGreen" : "cBlue")
-		this["Bar" 4].Opt(this.SoundDevices[4].Muted = 0 ? "BackgroundDefault" : "BackgroundMaroon")
+		Loop 4
+		{
+			this["Bar" A_Index].Opt(this.MediaKeyIndex = A_Index ? "cGreen" : "cBlue")
+			this["Bar" A_Index].Opt(this.SoundDevices[A_Index].Muted = 0 ? "BackgroundDefault" : "BackgroundMaroon")
+		}
 
-		static Timer := ObjBindMethod(this, "Hide")
+		static Timer := ObjBindMethod(this, "Save")
 		SetTimer Timer, -1400
 	}
 
