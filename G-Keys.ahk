@@ -1,14 +1,15 @@
 #Requires AutoHotkey v2.0
 
 #Include Include/Initialize.ahk
-#Include WaveLink.ahk
+#Include Include/WaveLink.ahk
+#Include Include/AutoOpen.ahk
 
 ; Scan Code & Virtual Key reference: https://docs.google.com/spreadsheets/d/1GSj0gKDxyWAecB3SIyEZ2ssPETZkkxn67gdIwL1zFUs/
 
 ; Mouse
 ; ==========
 
-#HotIf WinActive("ahk_exe WindowsTerminal.exe") or WinActive("ahk_class Engine") or WinActive("ahk_exe Photoshop.exe")
+#HotIf WinActive("ahk_exe WindowsTerminal.exe") or WinActive("ahk_class Engine") or WinActive("ahk_exe Photoshop.exe") or WinActive("ahk_exe ahk_exe FontLab 8.exe")
 *F13:: Send "{RCtrl down}{RShift down}{Tab}{RShift up}{RCtrl up}"
 *F14:: Send "{RCtrl down}{Tab}{RCtrl up}"
 
@@ -33,19 +34,22 @@
 <!F15:: Send "{RCtrl down}{RShift down}{t}{RShift up}{RCtrl up}" ; -- Restore Closed Tab
 
 #HotIf WinActive("ahk_exe devenv.exe") ; Visual Studio
-*F13::Send "{RCtrl down}{RAlt down}{PgUp}{RAlt up}{RCtrl up}"
-*F14::Send "{RCtrl down}{RAlt down}{PgDn}{RAlt up}{RCtrl up}"
+*F13:: Send "{RCtrl down}{RAlt down}{PgUp}{RAlt up}{RCtrl up}"
+*F14:: Send "{RCtrl down}{RAlt down}{PgDn}{RAlt up}{RCtrl up}"
 
 #HotIf WinActive("ahk_exe mpc-be64.exe")    ; Media Player Classic - Black Edition
 *F13:: Send "{RCtrl down}{Left}{RCtrl up}"  ; -- Backward 1 frame
 *F14:: Send "{RCtrl down}{Right}{RCtrl up}" ; -- Forward 1 frame
 
 #HotIf WinActive("ahk_exe dontstarve_steam.exe") or WinActive("ahk_exe dontstarve_steam_x64.exe") ; Don't Starve
-*F13::Send "{q}" ; -- Rotate Left
-*F14::Send "{e}" ; -- Rotate Right
+*F13:: Send "{q}" ; -- Rotate Left
+*F14:: Send "{e}" ; -- Rotate Right
 
 #HotIf WinActive("ahk_exe CULTIC.exe")
 *F15:: Send "{q}"
+
+#HotIf WinActive("ahk_exe hl2.exe")
+*F15:: Send "{v}"
 
 #HotIf WinActive("ahk_exe eggwife-Win64-Shipping.exe")
 *F15:: SendEvent "{Blind}{c}"
@@ -60,6 +64,20 @@
 #HotIf WinActive("Nightmare Reaper")
 *F15:: Send "{Blind}{\ down}"
 *F15 up:: Send "{Blind}{\ up}"
+
+#HotIf WinActive("ahk_class TscShellContainerClass")
+~vkFF::
+{
+	; An artificial vkFF keystroke is detected when the RDP client becomes active.
+	; At that point, the RDP client installs its own keyboard hook which takes
+	; precedence over ours, so…
+	if (A_TimeIdlePhysical > A_TimeSinceThisHotkey)
+	{
+		Suspend True
+		Suspend False ; …reinstall our hook.
+		Sleep 50
+	}
+}
 
 ; This is mainly done so that they aren't treated as mouse "clicks"
 ; if not actually focused on a window yet.
@@ -93,12 +111,10 @@
 	; Mic mute toggle
 	try SoundSetMute -1, , "Mic In"
 	Send "{SC073 down}"
-	return
 }
 *SC073 up::
 {
 	Send "{SC073 up}"
-	return
 }
 
 *SC070:: ;G2
@@ -107,34 +123,28 @@
 	; Open key history, scroll down
 	KeyHistory
 	Send "{F5}"
-	return
 }
 *SC070 up::
 {
 	Send "{SC070 up}"
-	return
 }
 
 *SC07D:: ;G3
 {
 	Send "{SC07D down}"
-	return
 }
 *SC07D up::
 {
 	Send "{SC07D up}"
-	return
 }
 
 *SC079:: ;G4
 {
 	Send "{SC079 down}"
-	return
 }
 *SC079 up::
 {
 	Send "{SC079 up}"
-	return
 }
 
 *SC07B:: ;G5
@@ -174,48 +184,4 @@
 {
 	Send "{SC07E up}"
 	return
-}
-
-; Auto-open programs
-; ==========
-
-Loop
-{
-	if not ProcessExist("Unity Hub.exe")
-	{
-		try
-		{
-			Run "C:\Program Files\Unity Hub\Unity Hub.exe"
-			WinWait "Unity Hub"
-			WinClose "Unity Hub"
-		}
-	}
-	if not WinExist("ahk_exe Discord.exe")
-	{
-		if ProcessExist("Discord.exe")
-		{
-			try
-			{
-				Run "C:\Users\Thaddeus\AppData\Local\Discord\Update.exe --processStart Discord.exe"
-				WinWait "Discord"
-				WinRestore "Discord"
-				WinMinimize "Discord"
-			}
-		}
-	}
-	Sleep 1000
-}
-
-#HotIf WinActive("ahk_class TscShellContainerClass")
-~vkFF::
-{
-	; An artificial vkFF keystroke is detected when the RDP client becomes active.
-	; At that point, the RDP client installs its own keyboard hook which takes
-	; precedence over ours, so…
-	if (A_TimeIdlePhysical > A_TimeSinceThisHotkey)
-	{
-		Suspend True
-		Suspend False ; …reinstall our hook.
-		Sleep 50
-	}
 }

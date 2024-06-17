@@ -2,7 +2,7 @@
 
 if (A_ScriptFullPath = A_LineFile)
 {
-	MsgBox("This script is not meant to be executed.",,16)
+	MsgBox("This script is not meant to be executed.", , 16)
 	ExitApp 2
 }
 
@@ -136,10 +136,10 @@ class WaveLink extends Gui
 }
 
 WaveLinkSingleton := WaveLink()
-*Media_Stop::WaveLinkSingleton.UpdateIndex(1)
-*Media_Prev::WaveLinkSingleton.UpdateIndex(2)
-*Media_Play_Pause::WaveLinkSingleton.UpdateIndex(3)
-*Media_Next::WaveLinkSingleton.UpdateIndex(4)
-*Volume_Mute::WaveLinkSingleton.UpdateMute()
-*Volume_Up::WaveLinkSingleton.RaiseVolume()
-*Volume_Down::WaveLinkSingleton.LowerVolume()
+*Media_Stop:: WaveLinkSingleton.UpdateIndex(1)
+*Media_Prev:: WaveLinkSingleton.UpdateIndex(2)
+*Media_Play_Pause:: WaveLinkSingleton.UpdateIndex(3)
+*Media_Next:: WaveLinkSingleton.UpdateIndex(4)
+*Volume_Mute:: WaveLinkSingleton.UpdateMute()
+*Volume_Up:: WaveLinkSingleton.RaiseVolume()
+*Volume_Down:: WaveLinkSingleton.LowerVolume()
