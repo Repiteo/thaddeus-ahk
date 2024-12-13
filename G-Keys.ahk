@@ -65,6 +65,15 @@
 *F15:: Send "{Blind}{\ down}"
 *F15 up:: Send "{Blind}{\ up}"
 
+#HotIf WinActive("ahk_exe Cookie Clicker.exe")
+*F15::
+{
+	While GetKeyState("F15", "P") and WinActive("ahk_exe Cookie Clicker.exe") {
+		Click
+		Sleep 33  ; floor(1000 / 30)
+	}
+}
+
 #HotIf WinActive("ahk_class TscShellContainerClass")
 ~vkFF::
 {

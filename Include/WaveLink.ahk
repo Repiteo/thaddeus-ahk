@@ -135,11 +135,25 @@ class WaveLink extends Gui
 	}
 }
 
-WaveLinkSingleton := WaveLink()
-*Media_Stop:: WaveLinkSingleton.UpdateIndex(1)
-*Media_Prev:: WaveLinkSingleton.UpdateIndex(2)
-*Media_Play_Pause:: WaveLinkSingleton.UpdateIndex(3)
-*Media_Next:: WaveLinkSingleton.UpdateIndex(4)
-*Volume_Mute:: WaveLinkSingleton.UpdateMute()
-*Volume_Up:: WaveLinkSingleton.RaiseVolume()
-*Volume_Down:: WaveLinkSingleton.LowerVolume()
+; Migrated to Stream Deck for audio control
+; WaveLinkSingleton := WaveLink()
+; *Media_Stop:: WaveLinkSingleton.UpdateIndex(1)
+; *Media_Prev:: WaveLinkSingleton.UpdateIndex(2)
+; *Media_Play_Pause:: WaveLinkSingleton.UpdateIndex(3)
+; *Media_Next:: WaveLinkSingleton.UpdateIndex(4)
+; *Volume_Mute:: WaveLinkSingleton.UpdateMute()
+; *Volume_Up:: WaveLinkSingleton.RaiseVolume()
+; *Volume_Down:: WaveLinkSingleton.LowerVolume()
+
+; Alternative implementation
+try {
+	if SoundGetVolume(, "Wave Link System") == 100
+		and SoundGetVolume(, "Wave Link Voice Chat") == 100
+		and SoundGetVolume(, "Wave Link Browser") == 100
+		and SoundGetVolume(, "Wave Link Music") == 100 {
+		SoundSetVolume(50, , "Wave Link System")
+		SoundSetVolume(50, , "Wave Link Voice Chat")
+		SoundSetVolume(50, , "Wave Link Browser")
+		SoundSetVolume(50, , "Wave Link Music")
+	}
+}
